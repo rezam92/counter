@@ -1,9 +1,11 @@
 import 'package:counter_test/application/di/di.dart';
 import 'package:counter_test/presentation/bloc/tab_bar_cubit.dart';
 import 'package:counter_test/presentation/pages/main_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:styled_widget/styled_widget.dart';
 
 class Application extends StatelessWidget {
   const Application({Key? key}) : super(key: key);
@@ -28,9 +30,20 @@ class Application extends StatelessWidget {
                   child: const MainScreen(),
                 );
               }
-              return const Scaffold(
-                body: Center(
-                  child: Text('Splash Screen'),
+              return Scaffold(
+                backgroundColor: Colors.deepPurpleAccent[400],
+                body: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Counter App').textColor(Colors.white).fontSize(32.sp),
+                      ],
+                    ).padding(bottom: 25),
+                    CupertinoActivityIndicator(radius: 20.r, color: Colors.white),
+                  ],
                 ),
               );
             },
