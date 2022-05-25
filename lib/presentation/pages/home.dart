@@ -1,7 +1,6 @@
 import 'package:counter_test/presentation/bloc/counter_cubit.dart';
 import 'package:counter_test/presentation/widgets/counter_widget.dart';
 import 'package:counter_test/presentation/widgets/error_widget.dart';
-import 'package:counter_test/presentation/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,13 +20,8 @@ class HomeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (state is CounterInitial)
-                      CounterWidget(
-                        counter: state.counter,
-                        increment: () => context.read<CounterCubit>().increment(),
-                        decrement: () => context.read<CounterCubit>().decrement(),
-                      ),
-                    if (state is CounterLoading) const LoadingIndicator(),
+                    if (state is CounterLoaded || state is CounterLoading)
+                      CounterWidget(),
                     if (state is CounterError)
                       ErrorWidgets(
                         error: state.error,

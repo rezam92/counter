@@ -30,40 +30,47 @@ class MainScreen extends StatelessWidget {
   }
 
   Widget buildBottom(BuildContext context, TabBarInitial state) {
-    return Scaffold(
-      body: Center(
-        child: screens.elementAt(state.tabIndex),
-      ),
-      bottomNavigationBar: SizedBox(
-        height: ScreenUtil().setHeight(60),
-        child: BottomNavigationBar(
-          showUnselectedLabels: false,
-          showSelectedLabels: true,
-          type: BottomNavigationBarType.fixed,
-          selectedFontSize: 11.sp,
-          unselectedFontSize: 10.sp,
-          unselectedIconTheme: IconThemeData(
-            color: Colors.grey[400],
+    return BlocBuilder<CounterCubit, CounterState>(
+      builder: (context, counterState) {
+        return Scaffold(
+          body: Center(
+            child: screens.elementAt(state.tabIndex),
           ),
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.home, size: 20.r),
-              label: 'Home',
-              backgroundColor: Colors.white,
+          bottomNavigationBar: SizedBox(
+            height: ScreenUtil().setHeight(60),
+            child: BottomNavigationBar(
+              showUnselectedLabels: false,
+              showSelectedLabels: true,
+              type: BottomNavigationBarType.fixed,
+              selectedFontSize: 11.sp,
+              unselectedFontSize: 10.sp,
+              unselectedIconTheme: IconThemeData(
+                color: Colors.grey[400],
+              ),
+              items: <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.home, size: 20.r),
+                  label: 'Home',
+                  backgroundColor: Colors.white,
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.rectangle_paperclip, size: 20.r),
+                  label: 'Result',
+                  backgroundColor: Colors.white,
+                ),
+              ],
+              selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+              currentIndex: state.tabIndex,
+              selectedItemColor: Colors.purple[600],
+              unselectedItemColor: Colors.grey[600],
+              onTap: (index) {
+                if (counterState is CounterLoading) return;
+                context.read<TabBarCubit>().changeTabBarIndex(index);
+              },
             ),
-            BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.rectangle_paperclip, size: 20.r),
-              label: 'Result',
-              backgroundColor: Colors.white,
-            ),
-          ],
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-          currentIndex: state.tabIndex,
-          selectedItemColor: Colors.purple[600],
-          unselectedItemColor: Colors.grey[600],
-          onTap: (index) => context.read<TabBarCubit>().changeTabBarIndex(index),
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

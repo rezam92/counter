@@ -10,37 +10,53 @@ class CounterCubit extends Cubit<CounterState> {
   CounterCubit(this.useCase) : super(CounterLoading()) {
     readCounter();
   }
+
   final CounterUseCase useCase;
 
   Future readCounter() async {
     emit(CounterLoading());
     var res = await useCase.readCounter();
-    emit(res.fold((l) => CounterError((l as FailureOperation).errorReason), (r) => CounterInitial(counter: r)));
+    emit(res.fold<CounterState>(
+      (l) => CounterError((l as FailureOperation).errorReason),
+      (r) => CounterLoaded(counter: r),
+    ));
   }
 
   Future decrement() async {
-    var res = await useCase.increment((state as CounterInitial).counter);
-    if (res.isRight()) {
-      emit(CounterInitial(counter: (state as CounterInitial).counter - 1));
-    } else {
-      emit(res.fold(
-        (l) => CounterError((l as FailureOperation).errorReason),
-        (r) => CounterInitial(counter: ((state as CounterInitial).counter - 1)),
-      ));
-      emit((state as CounterInitial).copyWith());
+    if (state is CounterLoading) return;
+    var preState = state as CounterLoaded;
+    emit(CounterLoading());
+    try {
+      var res = await useCase.decrement(preState.counter);
+      if (res.isRight()) {
+        emit(CounterLoaded(counter: preState.counter - 1));
+      } else {
+        emit(res.fold(
+          (l) => CounterError((l as FailureOperation).errorReason),
+          (r) => CounterLoaded(counter: (preState.counter - 1)),
+        ));
+      }
+    } catch (e) {
+      CounterError(e.toString());
     }
   }
 
   Future increment() async {
-    var res = await useCase.increment((state as CounterInitial).counter);
-    if (res.isRight()) {
-      emit(CounterInitial(counter: (state as CounterInitial).counter + 1));
-    } else {
-      emit(res.fold(
-        (l) => CounterError((l as FailureOperation).errorReason),
-        (r) => CounterInitial(counter: ((state as CounterInitial).counter + 1)),
-      ));
-      emit((state as CounterInitial).copyWith());
+    if (state is CounterLoading) return;
+    var preState = state as CounterLoaded;
+    emit(CounterLoading());
+    try {
+      var res = await useCase.increment(preState.counter);
+      if (res.isRight()) {
+        emit(CounterLoaded(counter: preState.counter + 1));
+      } else {
+        emit(res.fold(
+          (l) => CounterError((l as FailureOperation).errorReason),
+          (r) => CounterLoaded(counter: (preState.counter + 1)),
+        ));
+      }
+    } catch (e) {
+      CounterError(e.toString());
     }
   }
 }

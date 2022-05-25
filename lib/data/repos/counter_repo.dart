@@ -11,7 +11,7 @@ class CounterRepoImpl extends CounterRepo {
   @override
   Future<Either<Failure, void>> decrement(int oldCounter) async {
     try {
-      if (await _dbService.writeCounter((--oldCounter))) {
+      if (await _dbService.decrement((--oldCounter))) {
         return const Right(null);
       } else {
         return Left(FailureOperation(errorReason: "Could not decrease"));
@@ -24,7 +24,7 @@ class CounterRepoImpl extends CounterRepo {
   @override
   Future<Either<Failure, void>> increment(int oldCounter) async {
     try {
-      if (await _dbService.writeCounter((++oldCounter))) {
+      if (await _dbService.increment((++oldCounter))) {
         return const Right(null);
       } else {
         return Left(FailureOperation(errorReason: "Could not increase"));

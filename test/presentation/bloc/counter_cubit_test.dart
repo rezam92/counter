@@ -23,16 +23,16 @@ void main() {
   });
 
   test(('init state'), () {
-    expect(cubit.state, equals(CounterInitial(counter: counter)));
+    expect(cubit.state, equals(CounterLoaded(counter: counter)));
   });
 
   test(('inc state'), () async {
     await cubit.increment();
-    expect(cubit.state, equals(CounterInitial(counter: counter + 1)));
+    expect(cubit.state, equals(CounterLoaded(counter: counter + 1)));
   });
 
   test(('dec state'), () async {
     await cubit.decrement();
-    expect(cubit.state, equals(CounterInitial(counter: counter - 1)));
+    expect(cubit.state, equals(CounterLoaded(counter: counter - 1)));
   });
 }

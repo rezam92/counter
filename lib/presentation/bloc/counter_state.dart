@@ -8,17 +8,17 @@ class CounterLoading extends CounterState {
   List<Object?> get props => [];
 }
 
-class CounterInitial extends CounterState {
+class CounterLoaded extends CounterState {
   final int counter;
 
-  CounterInitial({
+  CounterLoaded({
     required this.counter,
   });
 
-  CounterInitial copyWith({
+  CounterLoaded copyWith({
     int? counter,
   }) {
-    return CounterInitial(
+    return CounterLoaded(
       counter: counter ?? this.counter,
     );
   }
@@ -29,6 +29,7 @@ class CounterInitial extends CounterState {
 
 class CounterError extends CounterState {
   final String error;
+
   CounterError(this.error);
 
   @override
