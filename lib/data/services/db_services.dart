@@ -1,14 +1,48 @@
-import 'package:counter_test/application/di/di.dart';
-import 'package:counter_test/data/services/storage.dart';
+import 'package:dio/dio.dart';
 
 class DBService {
-  Future<bool> writeCounter(int counter) async {
-    var locator = getIt.get<ILocalStorage>();
-    return await locator.write<int>('counter', counter);
+  Future<bool> increment(int counter) async {
+    try {
+      var dio = Dio();
+      var res = await dio.get(
+        'https://tickyar.ir/api/v1/site/increment',
+      );
+      if (res.statusCode == 200) {
+        return true;
+      }
+    } catch (e) {
+      throw Exception('server error');
+    }
+    throw Exception('unknown error');
+  }
+
+  Future<bool> decrement(int counter) async {
+    try {
+      var dio = Dio();
+      var res = await dio.get(
+        'https://tickyar.ir/api/v1/site/decrement',
+      );
+      if (res.statusCode == 200) {
+        return true;
+      }
+    } catch (e) {
+      throw Exception('server error');
+    }
+    throw Exception('unknown error');
   }
 
   Future<int> readCounter() async {
-    var locator = getIt.get<ILocalStorage>();
-    return ((await locator.read<int?>('counter')) ?? 0);
+    try {
+      var dio = Dio();
+      var res = await dio.get(
+        'https://tickyar.ir/api/v1/site/read',
+      );
+      if (res.statusCode == 200) {
+        return res.data;
+      }
+    } catch (e) {
+      throw Exception('server error');
+    }
+    throw Exception('unknown error');
   }
 }
